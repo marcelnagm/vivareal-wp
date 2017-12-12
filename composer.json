@@ -1,0 +1,20 @@
+{
+    "require": {
+          "illuminate/database": "*",      
+          "illuminate/container": "*",
+          "illuminate/contracts": "*",
+          "illuminate/events": "*",
+          "illuminate/support": "*"
+    },
+    "autoload":
+            {
+                "psr-4":
+                        {
+                            "Controllers\\": "app/controllers/",
+                            "Models\\": "app/models/"
+
+                        }
+            
+}
+
+}

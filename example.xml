@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListingDataFeed xmlns="http://www.vivareal.com/schemas/1.0/VRSync" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.vivareal.com/schemas/1.0/VRSync  http://xml.vivareal.com/vrsync.xsd">
+    <Header>
+        <Provider>Imobiliaria Brasil</Provider>
+        <Email>contacto@imobiliaria.com</Email>
+    </Header>
+    <Listings>
+        <Listing>
+        <ListingID>AP01</ListingID>
+        <Title><![CDATA[Apartamento para Venda Moema. - São Paulo / SP]]></Title>
+        <TransactionType>For Sale</TransactionType>
+        <Media>
+            <Item medium="image" caption="img1" primary="true">http://www.fornecedor.com/images/fdsfdddafdaredaff.jpg</Item>
+            <Item medium="image" caption="img2">http://www.fornecedor.com/images/fdafdafdafda.jpg</Item>
+        </Media> 
+        <Details>
+            <PropertyType>Residential / Apartament</PropertyType>
+            <Description><![CDATA[Apartamento em andar alto,vista para parque do Ibirapuera, quatro apartamentos por                               
+                    andar, prédio com vinte e um    andares, lazer de clube. Apartamento com 73 m² de área útil, living para dois ambientes                       
+                    com terraço, cozinha americana, área de serviço, dois quartos, dois banheiros ( um social, serve como lavabo).]]>
+            </Description>
+            <ListPrice currency="BRL">650000</ListPrice>
+            <LivingArea unit="square metres">73</LivingArea>
+            <Bedrooms>2</Bedrooms>
+            <Bathrooms>2</Bathrooms>
+        </Details>
+        <Location displayAddress="Neighborhood">
+            <Country abbreviation="BR">Brasil</Country>
+            <State abbreviation="SP">São Paulo</State>
+            <City>São Paulo</City>
+            <Zone>Zona Sul</Zone>
+            <Neighborhood>Moema</Neighborhood>
+        </Location>
+        <ContactInfo>
+            <Name>Fornecedor do Feed Brasil</Name>
+            <Email>fornecedor@brasil.com.br</Email>
+         </ContactInfo>
+        </Listing>
+        <Listing> 
+        <ListingID>CA001</ListingID>
+        <Title><![CDATA[Excelente oportunidade Casa em Condomínio.]]></Title>
+        <TransactionType>For Rent</TransactionType>
+        <Media>
+            <Item medium="image" caption="img1" primary="true">http://www.fornecedor.com/images/01.jpg</Item>
+            <Item medium="image" caption="img2">http://www.fornecedor.com/images/02.jpg</Item>
+            </Media> 
+        <Details>
+            <PropertyType>Residential / Condo</PropertyType>
+            <Description><![CDATA[Casa linda no Butantã. Com 3 Dormitórios, 2 Banheiros, Área com churrasqueira e depósito privativo.
+                                                    Excelente localização, próximo do comercio, bancos, farmácias, padarias, escolas, transporte.
+                                                    Agende uma visita!.]]>
+            </Description>
+            <RentalPrice currency="BRL" period="Monthly">2100</RentalPrice>
+            <LivingArea unit="square metres">80</LivingArea>
+            <Bedrooms>3</Bedrooms>
+            <Bathrooms>2</Bathrooms>
+        </Details>
+        <Location displayAddress="Neighborhood">
+            <Country abbreviation="BR">Brasil</Country>
+            <State abbreviation="SP">São Paulo</State>
+            <City>São Paulo</City>
+            <Neighborhood>Butantã</Neighborhood>
+        </Location>
+        <ContactInfo>
+            <Name>Fornecedor do Feed Brasil</Name>
+            <Email>fornecedor@brasil.com.br</Email>
+         </ContactInfo>
+        </Listing>
+        <Listing>
+        <ListingID>CA001</ListingID>
+        <Title><![CDATA[Sala Comercial para Venda ou Aluguel, piso carpete de madeira, varanda.]]></Title>
+        <TransactionType>Sale/Rent</TransactionType>
+        <Media>
+            <Item medium="image" caption="img1" primary="true">http://www.fornecedor.com/images/01.jpg</Item>
+            <Item medium="image" caption="img2">http://www.fornecedor.com/images/02.jpg</Item>
+        </Media> 
+        <Details>
+            <PropertyType>Commercial / Office</PropertyType>
+            <Description><![CDATA[ Conjunto comercial no Paraíso, 25m², 01 sala, 01 lavabo, piso carpete de madeira, 
+               varanda, ar condicionado, copinha com armários, 1 vaga de garagem com manobrista no prédio.totalmente 
+               equipada, com parte elétrica completa, rede de dados sob o piso elevado, 4 tomadas, internet, telefones, computador, 
+                220 volts todas as tomadas.  Confira!]]>
+            </Description>
+            <ListPrice currency="BRL">560000</ListPrice>
+            <RentalPrice currency="BRL">3000</RentalPrice>
+            <LivingArea unit="square metres">25</LivingArea>
+            <Bathrooms>1</Bathrooms>
+        </Details>
+        <Location displayAddress="Neighborhood">
+            <Country abbreviation="BR">Brasil</Country>
+            <State abbreviation="SP">São Paulo</State>
+            <City>São Paulo</City>
+            <Neighborhood>Paraíso</Neighborhood>
+        </Location>
+        <ContactInfo>
+            <Name>Fornecedor do Feed Brasil</Name>
+            <Email>fornecedor@brasil.com.br</Email>
+         </ContactInfo>
+        </Listing>
+    </Listings>
+</ListingDataFeed>
