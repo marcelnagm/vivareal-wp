@@ -3,8 +3,9 @@ namespace Models;
  
 use \Illuminate\Database\Eloquent\Model;
  
-class matriculation extends Model {
+class post extends Model {
      
-    protected $table = 'matriculation';
+    protected $table = 'wp_posts';
       
+    
 }
