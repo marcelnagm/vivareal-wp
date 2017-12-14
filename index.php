@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require 'vendor/autoload.php';
 
@@ -72,6 +72,7 @@ $caracteristicas = array(
     'Salão de Festas' => 'Close to parks',
     '2 Vagas' => 'Parking Garage',
     'Quintal' => 'Backyard',
+    'Garagem' => 'Parking Garage',
     'Sacada' => 'Balcony/Terrace',
     'Depósito' => 'Warehouse',
     'Lareira' => 'Fireplace',
@@ -84,7 +85,27 @@ $caracteristicas = array(
     'Quadra Poliesportiva' => 'Sports Court',
     'Condomínio Fechado' => 'Fenced Yard',
     'Segurança 24h' => 'Security Guard on Duty',
+    'Área de serviço ' => 'Maid\'s Quarters',
+    'Cinema' => 'Movie Theater',
+    'Aquecimento' => 'Heating',
+    'Gerador elétrico' => 'Generator',
+    'Grama' => 'Lawn',
+    'Interfone' => 'Intercom',
+    'Vigia' => 'Doorman',
+    'Salão de Jogos Adulto' => 'Game room',
+    'Recepção' => 'Reception room',
+    'Pista de caminhada' => 'Jogging track',
+    'Espaço verde / Parque' => 'Green space / Park',
 );
+
+//Endereço minimo:   
+//<Location displayAddress="Neighborhood">
+//         <Country abbreviation="BR">Brasil</Country>
+//         <State abbreviation="SP">São Paulo</State>
+//         <City>São Paulo</City>
+//         <Neighborhood>Consolação</Neighborhood>
+//</Location>
+
 
 function fill($id, $meta_key, $row, $element,$attributes = NULL) {
     $info = Models\postmeta::query()->where('meta_key', '=', $meta_key)->
@@ -156,11 +177,12 @@ foreach ($imoveis as $imovel) {
     $Location->addAttribute('displayAddress','Neighborhood');
     fill($imovel->ID, 'plain_address', $Location, 'displayAddress');
         $Country = $Location->addChild('Country', "Brasil");
-//        $Country->addAttribute('abbreviation', 'BR');
+        $Country->addAttribute('abbreviation', 'BR');
 //        $State = $Location->addChild('State', "São Paulo");
 //        $State->addAttribute('abbreviation', 'SP');
         
     fill($imovel->ID, 'cidade', $Location, 'City');
+    fill($imovel->ID, 'região', $Location, 'Neighborhood');
 //      $Location->addChild('Zone', "Zona Sul");
 //      $Location->addChild('Neighborhood', "Moema");
 //
