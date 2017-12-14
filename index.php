@@ -47,6 +47,7 @@ $imoveis = Models\post::query()->
         where('post_status', '=', 'publish')->
         where('post_type', '=', 'property')
         ->get();
+// o que se apresenta no banco => o que deve ser colocado no arquivo viva real
 $tipo_imovel = array(
     'Apartamento' => 'Residential / Apartment',
     'Casa' => 'R Residential / Home',
@@ -56,6 +57,34 @@ $tipo_imovel = array(
     'Galpão' => 'Commercial / Industrial',
     'Gleba' => 'Residential / Land Lot',
 );
+// o que se apresenta no banco => o que deve ser colocado no arquivo viva real
+$caracteristicas = array(
+    'Churrasqueira' => 'BBQ',
+    'Ar condicionado' => 'Air Conditioning',
+    'Lavanderia' => 'Laundry',
+    'Academia' => 'Gym',
+    'Internet' => 'Internet Connection',
+    'Monitoramento por câmeras' => '24 Hour Security',
+    'Sauna' => 'Sauna',
+    'Piscina' => 'Pool',
+    'Tv por assinatura' => 'Cable Television',
+    'WiFi' => 'Internet Connection',
+    'Salão de Festas' => 'Close to parks',
+    '2 Vagas' => 'Parking Garage',
+    'Quintal' => 'Backyard',
+    'Sacada' => 'Balcony/Terrace',
+    'Depósito' => 'Warehouse',
+    'Lareira' => 'Fireplace',
+    'Mobiliado' => 'Furnished',
+    'Moveis planejados' => 'Furnished',
+    'Elevador' => 'Elevator',
+    'Jardim' => 'Garden',
+    'Espaço Gourmet' => 'Gourmet Area',
+    'Playground' => 'Playground',
+    'Quadra Poliesportiva' => 'Sports Court',
+    'Condomínio Fechado' => 'Fenced Yard',
+    'Segurança 24h' => 'Security Guard on Duty',
+);
 
 function fill($id, $meta_key, $row, $element,$attributes = NULL) {
     $info = Models\postmeta::query()->where('meta_key', '=', $meta_key)->
@@ -63,7 +92,9 @@ function fill($id, $meta_key, $row, $element,$attributes = NULL) {
     if (count($info) > 0) {
         $chid = $row->addChild($element, $info->meta_value);
         if (isset($attributes)) {
-            $chid->addAttribute('unit', 'square metres');
+            foreach ($attributes as $key => $value) {                
+            $chid->addAttribute($key, $value);
+            }
         }
     }
 }
@@ -105,24 +136,31 @@ foreach ($imoveis as $imovel) {
         }
     }
     fill($imovel->ID, 'description', $details, 'Description');
-    fill($imovel->ID, 'preço_imovel', $details, 'ListPrice');
-    fill($imovel->ID, 'area_imovel', $details, 'LivingArea');
+    fill($imovel->ID, 'preço_imovel', $details, 'ListPrice',array('currency' => 'BRL'));
+    fill($imovel->ID, 'area_imovel', $details, 'LivingArea',array('unit' =>'meter square'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
     fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
     fill($imovel->ID, 'suites', $details, 'Suites');
-//    $details->addChild('Suites', "2");
 //    
-//    $Features =$details->addChild('Features');
-//        $Features->addChild('Feature','BBQ');
+    $Features =$details->addChild('Features');
+      $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_tag\'')), true);
+    foreach ($class as $type => $value) {        
+//        echo $value['name'];
+           $Features->addChild('Feature',$caracteristicas[$value['name']]);
+    }
+    
+//     
 //        $Features->addChild('Feature','TV Security');
 //    
-//    $Location = $track->addChild('Location');
-//    $Location->addAttribute('displayAddress', 'Neighborhood');
-//        $Country = $Location->addChild('Country', "Brasil");
+    $Location = $track->addChild('Location');
+    $Location->addAttribute('displayAddress','Neighborhood');
+    fill($imovel->ID, 'plain_address', $Location, 'displayAddress');
+        $Country = $Location->addChild('Country', "Brasil");
 //        $Country->addAttribute('abbreviation', 'BR');
 //        $State = $Location->addChild('State', "São Paulo");
 //        $State->addAttribute('abbreviation', 'SP');
-//      $Location->addChild('City', "São Paulo");
+        
+    fill($imovel->ID, 'cidade', $Location, 'City');
 //      $Location->addChild('Zone', "Zona Sul");
 //      $Location->addChild('Neighborhood', "Moema");
 //
@@ -132,10 +170,6 @@ foreach ($imoveis as $imovel) {
 }
 
 
-/* create the root element of the xml tree */
 
-//for ($i = 1; $i <= 3; ++$i) {
-//}
-//
 Header('Content-type: text/xml');
 print($xml->asXML());
