@@ -168,10 +168,12 @@ foreach ($imoveis as $imovel) {
     }
     fill($imovel->ID, 'description', $details, 'Description');
     fill($imovel->ID, 'preço_imovel', $details, 'ListPrice',array('currency' => 'BRL'));
+    fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
     fill($imovel->ID, 'area_imovel', $details, 'LivingArea',array('unit' =>'meter square'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
     fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
     fill($imovel->ID, 'suites', $details, 'Suites');
+    fill($imovel->ID, 'vagas_de_garagem', $details, 'Garage',array('type'=>"Parking Space"));
 //    
     $Features =$details->addChild('Features');
       $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_tag\'')), true);
@@ -188,14 +190,16 @@ foreach ($imoveis as $imovel) {
     fill($imovel->ID, 'plain_address', $Location, 'displayAddress');
         $Country = $Location->addChild('Country', "Brasil");
         $Country->addAttribute('abbreviation', 'BR');
-//        $State = $Location->addChild('State', "São Paulo");
-//        $State->addAttribute('abbreviation', 'SP');
-        
-    fill($imovel->ID, 'cidade', $Location, 'City');
-    fill($imovel->ID, 'região', $Location, 'Neighborhood');
-//      $Location->addChild('Zone', "Zona Sul");
-//      $Location->addChild('Neighborhood', "Moema");
-//
+
+        $info = Models\postmeta::query()->where('meta_key', '=', 'região')->
+                    where('post_id', '=', $imovel->ID)->get()->first();
+    if (count($info) > 0) {
+        $local = explode('/', $info->meta_value);
+        $val = $Location->addChild('State', $local[2]);
+        $val = $Location->addChild('City', $local[1]);
+        $val = $Location->addChild('Neighborhood', $local[0]);
+                
+        }
 //    $ContactInfo = $track->addChild('ContactInfo');
 //    $ContactInfo->addChild('Name', "Fornecedor do Feed Brasil");
 //    $ContactInfo->addChild('Email', "fornecedor@brasil.com.br");
