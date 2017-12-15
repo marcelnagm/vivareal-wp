@@ -135,6 +135,7 @@ foreach ($imoveis as $imovel) {
 //    echo count($info);
     if (count($info) > 0) {
         $info = $info->meta_value == 'A Venda' ? 'For Sale' : 'For Rent';
+        $price = $info  == 'For Sale' ? 'ListPrice' : 'RentalPrice';
         $track->addChild('TransactionType', $info);
     }
     $info = Models\postmeta::query()->where('meta_key', '=', 'imovel_destacado')->
