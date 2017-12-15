@@ -196,9 +196,9 @@ foreach ($imoveis as $imovel) {
 //      $Location->addChild('Zone', "Zona Sul");
 //      $Location->addChild('Neighborhood', "Moema");
 //
-//    $ContactInfo = $track->addChild('ContactInfo');
-//    $ContactInfo->addChild('Name', "Fornecedor do Feed Brasil");
-//    $ContactInfo->addChild('Email', "fornecedor@brasil.com.br");
+    $ContactInfo = $track->addChild('ContactInfo');
+    $ContactInfo->addChild('Name', "Liliam Ribas Corretora de Imóveis");
+    $ContactInfo->addChild('Email', "contato@liliamribas.com.br");
 }
 
 
