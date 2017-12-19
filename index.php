@@ -14,8 +14,6 @@ require 'config.php';
 // Set the event dispatcher used by Eloquent models... (optional)
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
-use Models\wp_post;
-use Models\postmeta;
 
 $capsule->setEventDispatcher(new Dispatcher(new Container));
 
@@ -116,19 +114,18 @@ $caracteristicas = array(
 //</Location>
 
 
-function fill($id, $meta_key, $row, $element,$attributes = NULL) {
+function fill($id, $meta_key, $row, $element, $attributes = NULL) {
     $info = Models\postmeta::query()->where('meta_key', '=', $meta_key)->
                     where('post_id', '=', $id)->get()->first();
     if (count($info) > 0) {
         $chid = $row->addChild($element, $info->meta_value);
         if (isset($attributes)) {
-            foreach ($attributes as $key => $value) {                
-            $chid->addAttribute($key, $value);
+            foreach ($attributes as $key => $value) {
+                $chid->addAttribute($key, $value);
             }
         }
     }
 }
-
 
 foreach ($imoveis as $imovel) {
 //    echo $imovel->post_title;
@@ -144,7 +141,7 @@ foreach ($imoveis as $imovel) {
 //    echo count($info);
     if (count($info) > 0) {
         $info = $info->meta_value == 'A Venda' ? 'For Sale' : 'For Rent';
-        $price = $info  == 'For Sale' ? 'ListPrice' : 'RentalPrice';
+        $price = $info == 'For Sale' ? 'ListPrice' : 'RentalPrice';
         $track->addChild('TransactionType', $info);
     }
     $info = Models\postmeta::query()->where('meta_key', '=', 'imovel_destacado')->
@@ -154,9 +151,17 @@ foreach ($imoveis as $imovel) {
         $track->addChild('Featured', $info);
     }
     $media = $track->addChild('Media');
-     fill($imovel->ID, '_wp_attached_file', $media, 'Item',array('medium' => 'image','caption' => 'img1' ));
-//    $item->addAttribute('medium', 'image');
-//    $item->addAttribute('caption', 'img1');
+    $class = json_decode(json_encode($capsule->getConnection()->select('SELECT post_title,guid FROM `wp_posts`  WHERE `post_parent` = ' . $imovel->ID . ' and `post_mime_type` = \'image/jpeg\'')), true);
+    foreach ($class as $type => $value) {
+
+//        var_dump($value);
+
+        $item = $media->addChild('Item', $value['guid']);
+        $item->addAttribute('medium', 'image');
+        $item->addAttribute('caption', $value['post_title']);
+    }
+
+//    fill($imovel->ID, '_wp_attached_file', $media, 'Item', array('medium' => 'image', 'caption' => 'img1'));
     $details = $track->addChild('Details');
     $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_category\'')), true);
     foreach ($class as $type => $value) {
@@ -167,45 +172,46 @@ foreach ($imoveis as $imovel) {
         }
     }
     fill($imovel->ID, 'description', $details, 'Description');
-    fill($imovel->ID, 'preço_imovel', $details, 'ListPrice',array('currency' => 'BRL'));
+    fill($imovel->ID, 'preço_imovel', $details, 'ListPrice', array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
-    fill($imovel->ID, 'area_imovel', $details, 'LivingArea',array('unit' =>'meter square'));
+    fill($imovel->ID, 'area_imovel', $details, 'LivingArea', array('unit' => 'meter square'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
     fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
     fill($imovel->ID, 'suites', $details, 'Suites');
-    fill($imovel->ID, 'vagas_de_garagem', $details, 'Garage',array('type'=>"Parking Space"));
+    fill($imovel->ID, 'vagas_de_garagem', $details, 'Garage', array('type' => "Parking Space"));
 //    
-    $Features =$details->addChild('Features');
-      $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_tag\'')), true);
-    foreach ($class as $type => $value) {        
+    $Features = $details->addChild('Features');
+    $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_tag\'')), true);
+    foreach ($class as $type => $value) {
 //        echo $value['name'];
-           $Features->addChild('Feature',$caracteristicas[$value['name']]);
+        $Features->addChild('Feature', $caracteristicas[$value['name']]);
     }
-    
-//     
-//        $Features->addChild('Feature','TV Security');
-//    
-    $Location = $track->addChild('Location');
-    $Location->addAttribute('displayAddress','Neighborhood');
-    fill($imovel->ID, 'plain_address', $Location, 'displayAddress');
-        $Country = $Location->addChild('Country', "Brasil");
-        $Country->addAttribute('abbreviation', 'BR');
 
-        $info = Models\postmeta::query()->where('meta_key', '=', 'região')->
+    $Location = $track->addChild('Location');
+    $Location->addAttribute('displayAddress', 'Neighborhood');
+    fill($imovel->ID, 'plain_address', $Location, 'displayAddress');
+    $Country = $Location->addChild('Country', "Brasil");
+    $Country->addAttribute('abbreviation', 'BR');
+
+
+    $info = Models\postmeta::query()->where('meta_key', '=', 'região')->
                     where('post_id', '=', $imovel->ID)->get()->first();
     if (count($info) > 0) {
         $local = explode('/', $info->meta_value);
-        $val = $Location->addChild('State', $local[2]);
-        $val = $Location->addChild('City', $local[1]);
-        $val = $Location->addChild('Neighborhood', $local[0]);
-                
+        if (count($local) > 1) {
+            $val = $Location->addChild('State', $local[2]);
+            $val = $Location->addChild('City', $local[1]);
+            $val = $Location->addChild('Neighborhood', $local[0]);
         }
-//    $ContactInfo = $track->addChild('ContactInfo');
-//    $ContactInfo->addChild('Name', "Fornecedor do Feed Brasil");
-//    $ContactInfo->addChild('Email', "fornecedor@brasil.com.br");
+    }
+    $ContactInfo = $track->addChild('ContactInfo');
+    $ContactInfo->addChild('Name', "Liliam Ribas Corretora de Imóveis");
+    $ContactInfo->addChild('Email', "contato@liliamribas.com.br");
 }
 
 
+file_put_contents ( 'rss.xml', $xml->asXML());
+Header('Content-type: text/xml');
+print($xml->asXML());
 
-//Header('Content-type: text/xml');
-//print($xml->asXML());
+
