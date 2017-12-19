@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 require 'vendor/autoload.php';
 
@@ -153,8 +153,8 @@ foreach ($imoveis as $imovel) {
         $info = $info->meta_value == '1' ? 'true' : 'false';
         $track->addChild('Featured', $info);
     }
-//    $media = $track->addChild('Media');
-//    $item = $media->addChild('Item', "http://www.fornecedor.com/images/fdsfdddafdaredaff.jpg");
+    $media = $track->addChild('Media');
+     fill($imovel->ID, '_wp_attached_file', $media, 'Item',array('medium' => 'image','caption' => 'img1' ));
 //    $item->addAttribute('medium', 'image');
 //    $item->addAttribute('caption', 'img1');
     $details = $track->addChild('Details');
@@ -207,5 +207,5 @@ foreach ($imoveis as $imovel) {
 
 
 
-Header('Content-type: text/xml');
-print($xml->asXML());
+//Header('Content-type: text/xml');
+//print($xml->asXML());
