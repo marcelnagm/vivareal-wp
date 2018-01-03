@@ -140,7 +140,8 @@ foreach ($imoveis as $imovel) {
     ;
 //    echo count($info);
     if (count($info) > 0) {
-        $info = $info->meta_value == 'A Venda' ? 'For Sale' : 'For Rent';
+        $info = $info->meta_value == 'A venda' ? 'For Sale' : 'For Rent';
+//        echo $info;
         $price = $info == 'For Sale' ? 'ListPrice' : 'RentalPrice';
         $track->addChild('TransactionType', $info);
     }
