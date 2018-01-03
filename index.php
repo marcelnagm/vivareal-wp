@@ -48,7 +48,7 @@ $imoveis = Models\post::query()->
 // o que se apresenta no banco => o que deve ser colocado no arquivo viva real
 $tipo_imovel = array(
     'Apartamento' => 'Residential / Apartment',
-    'Casa' => 'R Residential / Home',
+    'Casa' => 'Residential / Home',
     'Chácara' => 'Residential / Farm Ranch',
     'Sítio' => 'Residential / Farm Ranch',
     'Flat' => 'Residential / Flat',
@@ -175,7 +175,7 @@ foreach ($imoveis as $imovel) {
     fill($imovel->ID, 'description', $details, 'Description');
     fill($imovel->ID, 'preço_imovel', $details, 'ListPrice', array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
-    fill($imovel->ID, 'area_imovel', $details, 'LivingArea', array('unit' => 'meter square'));
+    fill($imovel->ID, 'area_imovel', $details, 'LivingArea', array('unit' => 'square metres'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
     fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
     fill($imovel->ID, 'suites', $details, 'Suites');
