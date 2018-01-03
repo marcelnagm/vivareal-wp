@@ -132,7 +132,7 @@ foreach ($imoveis as $imovel) {
 //    var_dump($imovel);
     $track = $listings->addChild('Listing');
     $track->addChild('ListingID', $imovel->ID);
-    $track->addChild('Title', $imovel->post_title);
+    $track->addChild('Title', '<![CDATA['.$imovel->post_title.']]>');
     $info = Models\postmeta::query()->
             where('post_id', '=', $imovel->ID)->
             where('meta_key', '=', 'status_imovel')->get()
@@ -172,7 +172,11 @@ foreach ($imoveis as $imovel) {
             }
         }
     }
-    fill($imovel->ID, 'description', $details, 'Description');
+    $info = Models\postmeta::query()->where('meta_key', '=', 'description')->
+                    where('post_id', '=', $imovel->ID)->get()->first();
+    if (count($info) > 0) {
+      $details->addChild('Description', '<![CDATA['.$info->meta_value.']]>');
+    }
     fill($imovel->ID, 'preço_imovel', $details, 'ListPrice', array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
     fill($imovel->ID, 'area_imovel', $details, 'LivingArea', array('unit' => 'square metres'));
@@ -211,7 +215,7 @@ foreach ($imoveis as $imovel) {
 }
 
 
-file_put_contents ( 'rss.xml', $xml->asXML());
+file_put_contents('rss.xml', $xml->asXML());
 Header('Content-type: text/xml');
 print($xml->asXML());
 
