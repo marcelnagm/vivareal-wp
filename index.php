@@ -132,7 +132,7 @@ foreach ($imoveis as $imovel) {
 //    var_dump($imovel);
     $track = $listings->addChild('Listing');
     $track->addChild('ListingID', $imovel->ID);
-    $track->addChild('Title', '<![CDATA['.$imovel->post_title.']]>');
+    $track->addChild('Title', '&lt;![CDATA['.$imovel->post_title.']]&gt;');
     $info = Models\postmeta::query()->
             where('post_id', '=', $imovel->ID)->
             where('meta_key', '=', 'status_imovel')->get()
@@ -194,7 +194,7 @@ foreach ($imoveis as $imovel) {
 
     $Location = $track->addChild('Location');
     $Location->addAttribute('displayAddress', 'Neighborhood');
-    fill($imovel->ID, 'plain_address', $Location, 'displayAddress');
+    fill($imovel->ID, 'plain_address', $Location, 'Address');
     $Country = $Location->addChild('Country', "Brasil");
     $Country->addAttribute('abbreviation', 'BR');
 
