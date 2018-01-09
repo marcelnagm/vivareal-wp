@@ -135,7 +135,7 @@ foreach ($imoveis as $imovel) {
     $track->addChild('Title', '&lt;![CDATA['.$imovel->post_title.']]&gt;');
     $info = Models\postmeta::query()->
             where('post_id', '=', $imovel->ID)->
-            where('meta_key', '=', 'status_imovel')->get()
+            where('meta_key', '=', 'property_status')->get()
             ->first()
     ;
 //    echo count($info);
