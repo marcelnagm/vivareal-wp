@@ -140,8 +140,7 @@ foreach ($imoveis as $imovel) {
     ;
 //    echo count($info);
     if (count($info) > 0) {
-        $info = $info->meta_value == 'A venda' ? 'For Sale' : 'For Rent';
-//        echo $info;
+        $info = $info->meta_value == 'A venda' ? 'For Sale' : 'For Rent';        
         $price = $info == 'For Sale' ? 'ListPrice' : 'RentalPrice';
         $track->addChild('TransactionType', $info);
     }
@@ -177,7 +176,7 @@ foreach ($imoveis as $imovel) {
     if (count($info) > 0) {
       $details->addChild('Description', '<![CDATA['.$info->meta_value.']]>');
     }
-    fill($imovel->ID, 'preço_imovel', $details, 'ListPrice', array('currency' => 'BRL'));
+    fill($imovel->ID, 'preço_imovel', $details, $price, array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
     fill($imovel->ID, 'area_imovel', $details, 'LivingArea', array('unit' => 'square metres'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
