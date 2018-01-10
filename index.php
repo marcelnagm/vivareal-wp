@@ -132,7 +132,7 @@ foreach ($imoveis as $imovel) {
 //    var_dump($imovel);
     $track = $listings->addChild('Listing');
     $track->addChild('ListingID', $imovel->ID);
-    $track->addChild('Title', '&lt;![CDATA['.$imovel->post_title.']]&gt;');
+    $track->addChild('Title', '&lt;![CDATA[' . $imovel->post_title . ']]&gt;');
     $info = Models\postmeta::query()->
             where('post_id', '=', $imovel->ID)->
             where('meta_key', '=', 'property_status')->get()
@@ -140,7 +140,7 @@ foreach ($imoveis as $imovel) {
     ;
 //    echo count($info);
     if (count($info) > 0) {
-        $info = $info->meta_value == 'A venda' ? 'For Sale' : 'For Rent';        
+        $info = $info->meta_value == 'A venda' ? 'For Sale' : 'For Rent';
         $price = $info == 'For Sale' ? 'ListPrice' : 'RentalPrice';
         $track->addChild('TransactionType', $info);
     }
@@ -174,7 +174,7 @@ foreach ($imoveis as $imovel) {
     $info = Models\postmeta::query()->where('meta_key', '=', 'description')->
                     where('post_id', '=', $imovel->ID)->get()->first();
     if (count($info) > 0) {
-      $details->addChild('Description', '<![CDATA['.$info->meta_value.']]>');
+        $details->addChild('Description', '<![CDATA[' . $info->meta_value . ']]>');
     }
     fill($imovel->ID, 'preço_imovel', $details, $price, array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
@@ -193,7 +193,14 @@ foreach ($imoveis as $imovel) {
 
     $Location = $track->addChild('Location');
     $Location->addAttribute('displayAddress', 'Neighborhood');
-    fill($imovel->ID, 'plain_address', $Location, 'Address');
+    $info = Models\postmeta::query()->where('meta_key', '=', 'plain_address')->
+                    where('post_id', '=', $imovel->ID)->get()->first();
+    if (count($info) > 0) {
+        $local = explode(' - ', $info->meta_value);
+        if (count($local) > 1) {
+            $val = $Location->addChild('displayAddress', $local[0]);
+        }
+    }
     $Country = $Location->addChild('Country', "Brasil");
     $Country->addAttribute('abbreviation', 'BR');
 
