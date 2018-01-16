@@ -176,9 +176,9 @@ foreach ($imoveis as $imovel) {
     if (count($info) > 0) {
         $details->addChild('Description', '<![CDATA[' . $info->meta_value . ']]>');
     }
-    fill($imovel->ID, 'preço_imovel', $details, $price, array('currency' => 'BRL'));
+    fill($imovel->ID, 'property_price', $details, $price, array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
-    fill($imovel->ID, 'area_imovel', $details, 'LivingArea', array('unit' => 'square metres'));
+    fill($imovel->ID, 'property_area', $details, 'LivingArea', array('unit' => 'square metres'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
     fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
     fill($imovel->ID, 'suites', $details, 'Suites');
