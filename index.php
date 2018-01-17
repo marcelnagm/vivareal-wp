@@ -181,16 +181,16 @@ foreach ($imoveis as $imovel) {
     fill($imovel->ID, 'property_area', $details, 'LivingArea', array('unit' => 'square metres'));
     fill($imovel->ID, 'quartos', $details, 'Bedrooms');
     fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
-    fill($imovel->ID, 'suites', $details, 'Suites');
     fill($imovel->ID, 'vagas_de_garagem', $details, 'Garage', array('type' => "Parking Space"));
 //    
     $Features = $details->addChild('Features');
     $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_tag\'')), true);
-    foreach ($class as $type => $value) {
+    if (count($class) > 0) {
+        foreach ($class as $type => $value) {
 //        echo $value['name'];
-        $Features->addChild('Feature', $caracteristicas[$value['name']]);
+            $Features->addChild('Feature', $caracteristicas[$value['name']]);
+        }
     }
-
     $Location = $track->addChild('Location');
     $Location->addAttribute('displayAddress', 'Neighborhood');
     $info = Models\postmeta::query()->where('meta_key', '=', 'plain_address')->
