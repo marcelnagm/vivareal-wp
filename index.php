@@ -151,7 +151,7 @@ foreach ($imoveis as $imovel) {
         $track->addChild('Featured', $info);
     }
     $media = $track->addChild('Media');
-    $class = json_decode(json_encode($capsule->getConnection()->select('SELECT post_title,guid FROM `wp_posts`  WHERE `post_parent` = ' . $imovel->ID . ' and `post_mime_type` = \'image/jpeg\'')), true);
+    $class = json_decode(json_encode($capsule->getConnection()->select('SELECT post_title,guid FROM `wp_posts`  WHERE `post_parent` = ' . $imovel->ID . ' and `post_mime_type` like \'%image%\'')), true);
     foreach ($class as $type => $value) {
 
 //        var_dump($value);
@@ -198,7 +198,7 @@ foreach ($imoveis as $imovel) {
     if (count($info) > 0) {
         $local = explode(' - ', $info->meta_value);
         if (count($local) > 1) {
-            $val = $Location->addChild('displayAddress', $local[0]);
+            $val = $Location->addChild('Address', $local[0]);
         }
     }
     $Country = $Location->addChild('Country', "Brasil");
