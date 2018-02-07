@@ -178,10 +178,9 @@ foreach ($imoveis as $imovel) {
     }
     fill($imovel->ID, 'property_price', $details, $price, array('currency' => 'BRL'));
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
-    fill($imovel->ID, 'property_area', $details, 'LivingArea', array('unit' => 'square metres'));
-    fill($imovel->ID, 'quartos', $details, 'Bedrooms');
-    fill($imovel->ID, 'banheiros', $details, 'Bathrooms');
-    fill($imovel->ID, 'vagas_de_garagem', $details, 'Garage', array('type' => "Parking Space"));
+    fill($imovel->ID, 'bedrooms', $details, 'Bedrooms');
+    fill($imovel->ID, 'bathrooms', $details, 'Bathrooms');
+    fill($imovel->ID, 'vagas', $details, 'Garage', array('type' => "Parking Space"));
 //    
     $Features = $details->addChild('Features');
     $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_tag\'')), true);
@@ -204,17 +203,11 @@ foreach ($imoveis as $imovel) {
     $Country = $Location->addChild('Country', "Brasil");
     $Country->addAttribute('abbreviation', 'BR');
 
-
-    $info = Models\postmeta::query()->where('meta_key', '=', 'região')->
-                    where('post_id', '=', $imovel->ID)->get()->first();
-    if (count($info) > 0) {
-        $local = explode('/', $info->meta_value);
-        if (count($local) > 1) {
-            $val = $Location->addChild('State', $local[2]);
-            $val = $Location->addChild('City', $local[1]);
-            $val = $Location->addChild('Neighborhood', $local[0]);
-        }
-    }
+    fill($imovel->ID, 'neighborhood', $Location, 'Neighborhood');
+    fill($imovel->ID, 'city', $Location, 'City');
+    fill($imovel->ID, 'state', $Location, 'State');
+    fill($imovel->ID, 'cep', $Location, 'PostalCode');
+    
     $ContactInfo = $track->addChild('ContactInfo');
     $ContactInfo->addChild('Name', "Liliam Ribas Corretora de Imóveis");
     $ContactInfo->addChild('Email', "contato@liliamribas.com.br");
@@ -224,5 +217,4 @@ foreach ($imoveis as $imovel) {
 file_put_contents('rss.xml', $xml->asXML());
 Header('Content-type: text/xml');
 print($xml->asXML());
-
 
