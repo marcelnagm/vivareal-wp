@@ -163,14 +163,20 @@ foreach ($imoveis as $imovel) {
 
 //    fill($imovel->ID, '_wp_attached_file', $media, 'Item', array('medium' => 'image', 'caption' => 'img1'));
     $details = $track->addChild('Details');
-    $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_category\'')), true);
-    foreach ($class as $type => $value) {
-        foreach ($value as $d) {
-            if (array_has($tipo_imovel, $d)) {
-                $details->addChild('PropertyType', $tipo_imovel[$d]);
-            }
-        }
+//    $class = json_decode(json_encode($capsule->getConnection()->select('SELECT wp_term_taxonomy.taxonomy,wp_terms.name  FROM `wp_term_relationships`  ,wp_term_taxonomy ,wp_terms  WHERE wp_term_relationships.`object_id` = ' . $imovel->ID . ' and wp_term_relationships.term_taxonomy_id=wp_term_taxonomy.term_taxonomy_id and wp_term_taxonomy.term_id = wp_terms.term_id and `taxonomy` LIKE \'property_type\'')), true);
+//    foreach ($class as $type => $value) {
+//        foreach ($value as $d) {
+//            if (array_has($tipo_imovel, $d)) {
+//                $details->addChild('PropertyType', $tipo_imovel[$d]);
+//            }
+//        }
+//    }
+    $info = Models\postmeta::query()->where('meta_key', '=', 'property_type')->
+                    where('post_id', '=', $imovel->ID)->get()->first();
+    if (count($info) > 0) {
+        $chid = $details->addChild('PropertyType', $tipo_imovel[$info->meta_value]);       
     }
+    
     $info = Models\postmeta::query()->where('meta_key', '=', 'description')->
                     where('post_id', '=', $imovel->ID)->get()->first();
     if (count($info) > 0) {
