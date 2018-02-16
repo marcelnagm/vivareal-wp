@@ -186,6 +186,7 @@ foreach ($imoveis as $imovel) {
     fill($imovel->ID, 'ano_construido', $details, 'YearBuilt');
     fill($imovel->ID, 'bedrooms', $details, 'Bedrooms');
     fill($imovel->ID, 'bathrooms', $details, 'Bathrooms');
+    fill($imovel->ID, 'property_area', $details, 'LivingArea', array('unit' => 'square metres'));
     fill($imovel->ID, 'vagas', $details, 'Garage', array('type' => "Parking Space"));
 //    
     $Features = $details->addChild('Features');
